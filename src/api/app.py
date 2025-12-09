@@ -7,7 +7,6 @@ import chromadb
 from chromadb.config import Settings
 import os
 import logging
-from .drive_fetcher import fetch_and_extract
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -298,28 +297,6 @@ class DriveFetchRequest(BaseModel):
     q: Optional[str] = None
     output_dir: Optional[str] = None
     ingest: Optional[bool] = True
-
-@app.post("/fetch-and-ingest/drive")
-async def fetch_and_ingest_drive(body: DriveFetchRequest, _: str = Depends(verify_api_key)):
-    collection_name = body.collection_name or DEFAULT_COLLECTION
-
-    # fetch files from Drive and extract text
-    output_dir, docs = fetch_and_extract(body.access_token, max_files=body.max_files, q=body.q, output_dir=body.output_dir)
-
-    # prepare and add to Chroma
-    ids = [d["id"] for d in docs]
-    texts = [d["text"] for d in docs]
-    metas = [d["metadata"] for d in docs]
-
-    if ids and body.ingest:
-        collection = get_or_create_collection(collection_name)
-        collection.add(ids=ids, documents=texts, metadatas=metas)
-
-    return {
-        "output_dir": output_dir,
-        "ingested": len(ids),
-        "files": [{"id": d["id"], "path": d["path"]} for d in docs]
-    }
 
 
 if __name__ == "__main__":
