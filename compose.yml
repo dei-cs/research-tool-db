@@ -16,9 +16,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    networks:
-      - llm-gateway-network
-networks:
-  llm-gateway-network:
-    external: true
-    name: research-tool-llm_default

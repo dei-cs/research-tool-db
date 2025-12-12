@@ -289,15 +289,6 @@ async def reset_database(_: str = Depends(verify_api_key)):
     except Exception as e:
         logger.error(f"Error resetting database: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    
-class DriveFetchRequest(BaseModel):
-    access_token: str
-    collection_name: Optional[str] = None
-    max_files: Optional[int] = 100
-    q: Optional[str] = None
-    output_dir: Optional[str] = None
-    ingest: Optional[bool] = True
-
 
 if __name__ == "__main__":
     import uvicorn
