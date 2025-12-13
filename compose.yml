@@ -9,6 +9,7 @@ services:
     environment:
       - VECTORDB_API_KEY=${VECTORDB_API_KEY:-dev-vectordb-key-12345}
       - DEFAULT_COLLECTION=${DEFAULT_COLLECTION:-documents}
+      - ANONYMIZED_TELEMETRY=False
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8003/health"]

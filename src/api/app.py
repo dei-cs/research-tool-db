@@ -12,6 +12,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Silence ChromaDB telemetry errors (bug in 0.4.18)
+logging.getLogger("chromadb.telemetry.product.posthog").setLevel(logging.CRITICAL)
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Research Tool Vector DB",
